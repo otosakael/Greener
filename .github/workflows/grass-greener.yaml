@@ -20,9 +20,11 @@ jobs:
         lfs: false
         submodules: false
         set-safe-directory: true
-    - run: date > date.txt
-    - run: git config user.name "otosakael"
-    - run: git config user.email "fachry2710@gmail.com"
-    - run: git add date.txt
-    - run: git commit -m 'Greening'
-    - run: git push origin main
+    - run: |
+        git config --global user.name "otosakael"
+        git config --global user.email "fachry2710@gmail.com"
+        git config --global credential.helper 'cache --timeout=3600'
+        echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+        git add date.txt
+        git commit -m 'Greening'
+        git push origin main
