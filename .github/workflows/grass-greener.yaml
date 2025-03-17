@@ -13,7 +13,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}  # Menggunakan token GitHub Actions yang sudah tersedia
+        token: ${{ secrets.TOKEN  }}  # Menggunakan token GitHub Actions yang sudah tersedia
 
     - name: Create or Update date.txt
       run: |
