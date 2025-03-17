@@ -3,28 +3,31 @@ name: Grass Greener
 on:
   workflow_dispatch: {}
   schedule:
-  - cron: '0 0 * * *'
+    - cron: '0 0 * * *'  # Menjadwalkan workflow untuk berjalan setiap hari pada tengah malam
 
 jobs:
   commit:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
       with:
-        repository: otosakael/Greener
-        token: ${{ secrets.GITHUB_TOKEN }}   # Menambahkan token autentikasi
-        ssh-strict: true
-        persist-credentials: true
-        clean: true
-        fetch-depth: 1
-        lfs: false
-        submodules: false
-        set-safe-directory: true
-    - run: |
-        git config --global user.name "otosakael"
-        git config --global user.email "fachry2710@gmail.com"
-        git config --global credential.helper 'cache --timeout=3600'
-        echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
-        git add date.txt
-        git commit -m 'Greening'
-        git push origin main
+        token: ${{ secrets.GITHUB_TOKEN }}  # Menggunakan token GitHub Actions yang sudah tersedia
+
+    - name: Create or Update date.txt
+      run: |
+        echo "Timestamp: $(date)" > date.txt  # Menambahkan timestamp ke dalam file date.txt
+        git add date.txt  # Menambahkan file yang dimodifikasi ke staging area
+
+    - name: Set Git configuration
+      run: |
+        git config --global user.name "otosakael"  # Mengatur nama pengguna Git
+        git config --global user.email "fachry2710@gmail.com"  # Mengatur email pengguna Git
+
+    - name: Commit and Push changes
+      run: |
+        git commit -m "Greening"  # Commit dengan pesan "Greening"
+        git push origin main  # Push perubahan ke branch main
+      continue-on-error: true  # Menambahkan opsi untuk menghindari error jika tidak ada perubahan yang perlu di-commit
+
